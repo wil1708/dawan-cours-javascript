@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation Javascript</title>
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/bootstrap.bundle.js"></script>
+    <script src="../js/scripts.js"></script>
+    <script>
+        loaded(function () {
+            loadNav();
+
+            // Création d'un objet depuis un prototype
+            // Création du constructeur de l'objet
+            function Humain(nom, prenom, age){
+                this.nom = nom;
+                this.prenom = prenom;
+                this.age = age;
+                this.esperanceDeVie = parseInt(this.age) + Math.floor( Math.random()*20 );
+            }
+
+            // Mon humain sait faire des choses, 
+            // il connaît son nom
+            Humain.prototype.monNom = function(){
+                return `${prenom} !`;
+            };
+
+            // tous les humains savent crier
+            // si on ne préceise pas que la méthode
+            // est prototypée, on créer l'équivalent
+            // d'une fonction statique
+            Humain.crier = function(cri = ''){
+                return `${cri} RRRRRR !`;
+            };
+
+            //test de création de mon 1er humain
+            let premierHumain = new Humain('Doe', 'Naoh', 20);
+
+            console.log(premierHumain);
+            console.log(Humain.crier());
+            console.log(Humain.crier('CROM !'));
+            console.log(premierHumain instanceof Humain);
+            console.log(premierHumain instanceof Object);
+
+            let monBarbare = new Humain('LeBarbare', 'Conane', '15');
+            console.log(monBarbare);
+            console.log(Humain.crier());
+            console.log(Humain.crier('CROM !'));
+            console.log(monBarbare instanceof Humain);
+            console.log(monBarbare instanceof Object);
+
+            // JSON : JavaScript Object Notation
+            // on peut utiliser la syntaxe JSon pour créer un objet
+            // la clef des propriétés, au contraire d'un objet litéral,
+            // est écrite en chaîne de caractère
+
+            let objJson = {
+                'nom': 'Sno',
+                'prenom': 'Jon',
+                'Age': 18,
+                'gimmick': function(){
+                    return `Hello this is ${this.prenom} ${this.nom} welcome to Jackass !`;
+                }
+            };
+
+            console.log(objJson);
+            console.log(objJson instanceof Humain);
+            console.log(objJson instanceof Object);
+            console.log(objJson.gimmick());
+
+            let u = 'bla bla bla';
+
+            //objet litéral es6
+            let es6Object = {
+                u, // semblable à u: u,
+                foo: 'bar',
+                bar: 13.5,
+                help(){
+                    return 'I need somebody ! Anybody !';
+                }
+            }
+
+            console.log(es6Object);
+            console.log(es6Object.u);
+            console.log(es6Object.help());
+
+            // les classes en JS.
+            /*
+            Les classes sont apparues en es6
+            
+            Contrairement aux langage plus robustes (C++, Java... )
+            on ne déclare pas d'e 'attributs privés
+
+            par convention, ce qui doit être utilisé comme un attribut privé
+            sera préfixé dpar un _
+            */
+
+            // créer une class permet de "regrouper" la définition d'un Objet
+
+            class Voiture{
+                // il faut déclarer le constructeur de la classe :
+                // c'est l'appel qui permettra de créer des instance objet de la classe
+                constructor(marque, modele, couleur){
+                    this._marque = marque;  // pour proprement accéder à _maruqe, 
+                                            // vais devoir utiliser des méthodes 
+                                            // getter ou setter de la classe
+                    this.modele = modele;   // attribut public directement accessile par instance.modele
+                    this.couleur = couleur; // attribut public directement accessile par instance.couleur
+                }
+
+                // pour récupérer une valeur définie comme privée, il faut 
+                // donc utiliser un getter => une méthode qui renvoi la valeur d'un attribut
+                // pour modifier un attribut privée, il faut utliser un setter =>  qui modifie la valeur d'un attribut
+                // getter pour _marque
+                get getMarque(){
+                    return this._marque;
+                }
+
+                set setMarque(marque){
+                    this._marque = marque;
+                }
+
+                // les méthodes de Voiture
+                // <=> Voiture.prototype.demarrer() = function(){/* code méthode */};
+                demarrer(){
+                    return `la ${this.constructor.name} démarre`;
+                }
+
+                // <=> Voiture.prototype.avancer = function(){ /* code méthode */};
+                avancer(){
+                    return `la ${this.constructor.name} avance`;
+                }
+
+                // à la création du constructeur, une constante this.constructor.name
+                // est créée, elle contient le nom de la classe
+                showConstructor(){
+                    return this.constructor;
+                }
+
+                // méthode statique
+                /*
+                Appartient à la classe, et est 
+                partagée entre toute les instances 
+                d'une classe identique.
+                cela veut dire qu'elle n'est utilisable que via
+                l'appel direct de la classe
+                */
+
+                // <=> Voiture.klaxonner = function(){ /* code méthode statique */ };
+                // en code : Voiture.klaxonner();
+                static klaxonner(){
+                    return 'POUET ! POUET !';
+                }
+            }
+
+            class Ambulance extends Voiture{
+                // il faut un constructeur à cette classe étendue
+                // il doit être semblable à la classe mère
+                // <=> ?
+                constructor(marque, modele, couleur){
+                    super(marque, modele, couleur);
+                    this.sirene = false;
+                }
+
+                // on peut surcharger ou redéfinir une méthode
+                // de cette façon la méthode de la classe fille
+                // corresponds plus au comportement d'une ambulance
+                // <=> Ambulance.prototype.demarrer()
+                demarrer(){
+                    let bruit = '';
+                    bruit = (this.sirene)? 'PIN ! PON !' : 'vrrrrrrrrr';
+                    //return bruit; // soit juste le bruit
+                    return `${super.demarrer()} ${bruit}`;
+                }
+
+                // on peut rédéfinir les méthodes statiques
+                static klaxonner(){
+                    return `POUUUUUUUUUUET ! POUUUUUUUUUUET !`;
+                }
+            }
+
+            let maVoiture = new Voiture('Renault', 'Twingo', 'Vert poubelle');
+            console.log(maVoiture.showConstructor());
+            console.log(maVoiture.getMarque);
+            console.log(maVoiture.modele);
+            console.log(maVoiture.couleur);
+            maVoiture.setMarque = 'Peugeot';
+            maVoiture.modele = '205';
+            maVoiture.couleur = 'rouge';
+            console.log(Voiture.klaxonner());
+
+            // exemple d'autre méthode statiques "natives" dans JS
+            console.log(`Math.pow(2,3) : ${Math.pow(2,3)}`);
+            let dateNow = new Date();
+            console.log(`let dateNow = new Date() : ${dateNow}`);
+            console.log(`Date.now() : ${Date.now()}`);
+
+            let monAmbulance = new Ambulance('Peugeot', 'Partner', 'Blanche');
+            console.log(monAmbulance);
+            console.log(monAmbulance.demarrer());
+            monAmbulance.sirene = true;
+            console.log(monAmbulance.demarrer());
+            console.log(Ambulance.klaxonner());
+
+            console.log(`maVoiture instanceof Voiture : ${maVoiture instanceof Voiture}`);
+            console.log(`maVoiture instanceof Ambulance : ${maVoiture instanceof Ambulance}`);
+            console.log(`maVoiture instanceof Object : ${maVoiture instanceof Object}`);
+            console.log(`maVoiture instanceof Humain : ${maVoiture instanceof Humain}`);
+
+            console.log(`monAmbulance instanceof Voiture : ${monAmbulance instanceof Voiture}`);
+            console.log(`monAmbulance instanceof Ambulance : ${monAmbulance instanceof Ambulance}`);
+            console.log(`monAmbulance instanceof Object : ${monAmbulance instanceof Object}`);
+            console.log(`monAmbulance instanceof Humain : ${monAmbulance instanceof Humain}`);
+            
+            console.log(Math);
+            console.log(Math.constructor);
+
+            let Test = {
+                PI: 3.1416,
+                round: function(valeur){
+                    return Math.round(valeur)
+                }
+            }
+
+            console.log(Test);
+            console.log(Test.round(Test.PI));
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <header class="bg-light">
+        <h1>Formation Javascript</h1>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    </nav>
+    <main class="container">
+        <section class="row">
+            <article class="col-lg-12">
+                <header>
+                    <h2>POO : Programmation Orientée Objet</h2>
+                </header>
+                <main>
+                    <p>
+                        Tout se passe dans le code
+                    </p>
+                </main>
+            </article>
+        </section>
+    </main>
+    <footer class="bg-light">
+        &copy; Dawan 2021-11
+    </footer>
+</body>
+
+</html>

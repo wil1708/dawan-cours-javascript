@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Les Computed</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+<body>
+
+<div id="app" class="w-50 mx-auto">
+
+    <h1>Les computed</h1>
+
+    <div class="form-group">
+        <label for="question"> Quelle est la couleur du cheval blanc d'Henri 4 </label>
+        <input id="question" v-model="answer" class="form-control">
+    </div>
+    <p :class="checkAnswer()">Répondez correctement pour afficher en vert</p>
+
+    <div class="form-group">
+        <label for="question2">Franklin sait-il compter 2 par 2 et lacer ses chaussure ?</label>
+        <input id="question2" v-model="answer2" class="form-control">
+    </div>
+    <p :class="checkAnswerBis">Répondez correctement pour afficher en vert</p>
+
+
+    <fieldset>
+        <legend>Identité</legend>
+
+        <div class="form-group">
+            <label for="fullname">Prénom</label>
+            <input id="fullname" v-model="fullname" class="form-control">
+        </div>
+
+        <p> <b>Prenom:</b> {{ first_name}} </p>
+        <p> <b>Nom:</b> {{ last_name}} </p>
+
+    </fieldset>
+
+    <h2>Mon message inversé :</h2>
+    <p>{{message}}</p>
+    <p>{{ message.trim().split('').reverse().join('') }}</p>
+    <p>{{reversedMessage}}</p>
+    <!-- On peut se servir des computed pour afficher des expressions complexes
+    de manière plus lisible -->
+
+    <h2>Mes films : </h2>
+    <ul>
+        <li v-for="movie of filtered_movies" :key="movie">{{ movie }}</li>
+    </ul>
+
+</div>
+
+<script>
+    /*
+    Les valeurs computed (calculées )servent à surveiller une valeur, et à retourner quelque chose
+    en fonction de cette valeur,
+    On ne peut pas leur passer de paramétres
+     */
+
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            answer: '',
+            answer2: '',
+            first_name: 'Germaine',
+            last_name: 'Latourte',
+            message: ` Les chaussettes de l'archiduchesse sont-elles séches archi séche ?  `,
+            movies: ['Le Seigneur des anneaux', 'Là haut', 'Le Silence des Agneaux','Zoro', 'Atlantide'],
+        },
+        methods: {
+            checkAnswer() {
+                console.info('In methods check answer');
+                return (this.answer === 'blanc')? 'text-success' : 'text-danger';
+            }
+        },
+        computed: {
+            checkAnswerBis() {
+                console.info('In computed : check answer');
+                return (this.answer2 === 'oui')? 'text-success' : 'text-danger';
+            },
+            fullname : {
+                get() {
+                    return this.first_name + ' ' + this.last_name
+                },
+                set(value) {
+                    /* value : string, envoyée grâce au v-model sur fullname
+                     split : transforme une string en tableau de string
+                        array : [ 'prenom', 'nom' ]
+                     */
+                    const array = value.split(' ');
+                    this.first_name = array[0];
+                    this.last_name = array[1];
+                }
+            },
+            reversedMessage() {
+                return this.message.trim().split('').reverse().join('');
+            },
+            filtered_movies() {
+                return this.movies.sort();
+            }
+        },
+        watch: {
+            answer: function(value){ //sur une data
+                console.warn('Answer has been changed : ' + value)
+            },
+            fullname: function(value){ //sur une computed
+                console.log('FullName has been changed : ' + value)
+            },
+            toto: function(value){ //élément non déclaré : ne fonctionne pas
+                console.log(`Je n'existe pas`)
+            }
+        }
+    })
+
+</script>
+
+
+</body>
+</html>

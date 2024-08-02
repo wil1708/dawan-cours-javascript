@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Introduction à VueJS</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+</head>
+<body>
+<!-- En dehors de l'application -->
+<h2>Pas vue : </h2>
+<p> {{ 1 + 1 }} </p>
+
+<!-- Div id app -> Application VueJS -->
+<div id="app">
+
+    <!-- Declarative rendering -->
+    <h1 id="title" class="title" title="Mon titre">Bonjour {{ nom }}</h1>
+    <h2>Vue : </h2>
+    <p> {{ 1 + 1 }} </p>
+    <p> {{ 3 > 6}} </p>
+    <p>{{ a * b }}</p>
+
+    <ul>
+        <li v-for=" (m, index) of movies" v-bind:key="m">{{ m }}</li>
+    </ul>
+
+    <ul>
+        <li v-for=" (m, index) of movies" v-bind:key="index + 100">{{ m }}</li>
+    </ul>
+
+    <p v-if="!isLoaded">Chargement en cours</p>
+    <p v-else-if="noData">404 - pas de données</p>
+    <p v-else>Données chargées</p>
+
+    <!-- Gestion d'événements -->
+    <div>
+        <button v-on:click="sayHello()">Salutations</button>
+        <!-- v-on:click => @click -->
+        <button @click="sayHello()">Salutations</button>
+    </div>
+
+    <form @submit.prevent="sayHello()">
+        <input @keyup.left="leftPressed()" @keyup.enter="sayHello()"  type="text">
+        <button type="submit">Valider le formulaire</button>
+    </form>
+    <!--
+    Dans VueJS, on peut utiliser n'importe quelle touche de l'API JS Keyboard event
+    - Attention dans vue, les noms de touche ( clef ) doivent être en minucule, et en kebab case
+    - CapsLock -> caps-lock
+
+    Rappel conventions d'écriture :
+    CamelCase ou camelCase   -> PAS OK en HTML, utilisé pour les classes, noms de fonction
+    kebab-case
+    snake_case  -> pour les noms de variable
+    -->
+
+    <!-- V-Model -->
+    <div>
+        <label for="i_movie">Votre film préféré :</label>
+        <input id="i_movie" v-model="movie">
+        <button @click="validateMovie()">Valider</button>
+    </div>
+    <p v-if="movie">Votre film préféré est : {{ movie }}</p>
+    <p v-else>Vous n'avez pas encore indiquer votre film favori</p>
+    <!-- Les v-model permettent de lier un input avec une variable,
+    Leur valeur sera toujours identique :
+    - la valeur de la variable se modifie lorsqu'on écrit dans l'input,
+    - la valeur de l'input change lorsqu'on modifie la variable
+    -->
+
+
+</div>
+
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            nom : 'Toto',
+            a: 87,
+            b: 89,
+            movies: ['Le Seigneur des anneaux', 'Là haut', 'Le Silence des Agneaux'],
+            isLoaded: true,
+            noData: false,
+            movie: ''
+        },
+        methods : {
+            sayHello() {
+                console.log('Hello World !');
+            },
+            leftPressed() {
+                console.log('touche left activée')
+            },
+            validateMovie() {
+                if(!this.movie) {
+                    alert('Formulaire invalide');
+                } else {
+                    console.info('Formulaire envoyé');
+                    this.movies.push(this.movie);
+                    this.movie = '';
+                }
+            }
+        }
+    })
+
+    /*
+    Mise en pratique :
+    ------------------
+
+    - Créer un nouveau document, et y intégrer Vue.JS
+    - Dans le document :
+        - Un formulaire, avec un champs qui permet d'enregistrer une nouvelle tâche
+            - submit, via un bouton et la touche entrée
+            - on ne peut pas enregistrer de tâche vide
+        - Liste de tâches à faire : afficher
+        - Un bouton "supprimer", pour supprimer la tâche
+        - Si il n'y a pas de tâches à faire -> afficher un message
+     */
+
+</script>
+
+</body>
+</html>

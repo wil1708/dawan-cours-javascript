@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <h2>Les paramètres de requête</h2>
+
+    <p>
+        Dire bonjour à <a href="/params?name=john">John</a>
+    </p>
+
+    {% if null != name %}
+        <p>Bonjour {{ name }} !</p>
+    {% endif %}
+
+{% endblock %}

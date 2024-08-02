@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <style>
+    .fade-enter-active,
+    .fade-leave-active {
+      opacity: 1;
+    }
+
+    .fade-enter, .fade-leave-to {
+      opacity: 0;
+    }
+
+  </style>
+
+</head>
+<body>
+
+<div id="app" class="w-50 mx-auto">
+
+  <h1>Ma todo liste</h1>
+
+  <div>
+    <label for="td">Tâche :</label>
+    <input @keyup.enter="addTask" id="td" v-model="task">
+    <button @click="addTask" type="submit">Save</button>
+  </div>
+
+
+
+
+  <div>
+    <p v-if="l_tasks.length < 1">Vous n'avez pas encore de tâche à faire</p>
+    <div v-else>
+      <div class="btn-toolbar">
+        <div class="btn-group mr-2">
+          <button @click="changeFilter('ALL')"  class="btn btn-outline-dark">Tout</button>
+          <button @click="changeFilter('TODO')" class="btn btn-outline-dark">A faire</button>
+          <button @click="changeFilter('DOING')" class="btn btn-outline-dark">En Cours</button>
+          <button @click="changeFilter('DONE')" class="btn btn-outline-dark">Terminé</button>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-outline-danger" @click="deleteAllTasks">Vider la liste</button>
+        </div>
+      </div>
+      <ul class="list-group">
+          <li class="list-group-item"
+              v-for="(t) of displayed_tasks"
+              v-bind:key="t.id"
+              :class="'list-group-item-' + getClass(t.status)"
+          >
+            {{ t.text }}
+            <button class="btn"
+                    :class="'btn-outline-' + getClass(t.status)"
+                    @click="changeTask(t)">
+              <span v-if="t.status === 'TODO'">En cours</span>
+              <span v-else-if="t.status === 'DOING'">Terminer</span>
+              <span v-else>Supprimer</span>
+            </button>
+          </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const vm = new Vue({
+    el: '#app',
+    data: {
+      l_tasks : [],
+      task: '',
+      last_index: 1,
+      filter: 'ALL'
+    },
+    methods: {
+      addTask() {
+        if(this.task) {
+          const obj_task = {
+            text: this.task,
+            status: 'TODO',
+            id: this.last_index
+          }
+          this.l_tasks.push(obj_task);
+          this.last_index++;
+          this.task = '';
+        }
+      },
+      getClass(status) {
+        switch (status) {
+          case 'TODO':
+            return 'warning';
+          case 'DOING':
+            return 'info';
+          case 'DONE':
+            return 'success';
+        }
+      },
+      changeTask(task) {
+        if(task.status === 'TODO') {
+          task.status = 'DOING';
+        } else if(task.status === 'DOING') {
+          task.status = 'DONE';
+        } else if(task.status === 'DONE') {
+          this.deleteTask(task);
+        }
+      },
+      changeFilter(val) {
+        this.filter = val;
+      },
+      deleteTask(task) {
+        const index = this.l_tasks.indexOf(task);
+        if(index !== -1) {
+          this.l_tasks.splice(index, 1);
+        }
+      },
+      deleteAllTasks() {
+        this.l_tasks = [];
+      }
+    },
+    computed: {
+      displayed_tasks() {
+        if(this.filter === 'ALL') return this.l_tasks;
+        return this.l_tasks.filter(t => t.status === this.filter);
+      }
+    }
+  })
+
+
+</script>
+
+</body>
+</html>

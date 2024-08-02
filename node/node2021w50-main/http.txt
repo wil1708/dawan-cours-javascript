@@ -1,0 +1,13 @@
+Method / Verb
+
+get         => lire des données
+post        => ajouter une nouvelle ressource
+put         => modifier toutes les valeurs d'une ressource 
+patch       => modifier certaines valeurs d'une ressource 
+delete      => supprimer une ressource
+head        => récupérer les entêtes d'une page (pas de corps)
+options     => connaitre les actions disponibles sur une adresse
+connect     => établir une connexion vers le serveur
+trace       => afficher le chemin complet parcouru par une requête
+
+MVC => Model/View/Controller (Architecture de projet) => Router

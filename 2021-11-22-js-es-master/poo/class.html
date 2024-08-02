@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation Javascript</title>
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/bootstrap.bundle.js"></script>
+    <script type="module" src="../class/Aventure/Aventure.js"></script>
+    <script>
+
+    </script>
+</head>
+
+<body>
+    <header class="bg-light">
+        <h1>Formation Javascript</h1>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    </nav>
+    <main class="container">
+        <section class="row">
+            <article class="col-lg-6">
+                <header>
+                    <h2>POO : Personnages</h2>
+                </header>
+                <main id="personnage">
+                    <p>
+                        <label class="form-label">
+                            Prénom
+                        </label>
+                        <input type="text" id="prenomP" class="form-control" />
+                    </p>
+                    <p>
+                        <label class="form-label">
+                            Nom
+                        </label>
+                        <input type="text" id="nomP" class="form-control" />
+                    </p>
+                    <p>
+                        <label class="form-label">
+                            Choix de la classe :
+                        </label>
+                        <select id="classeP" class="form-select" aria-label="Default select example">
+                            <option selected value="Aventurier">Aventurier</option>
+                            <option value="Voleur">Voleur</option>
+                            <option value="Guerrier">Guerrier</option>
+                            <option value="Mage">Mage</option>
+                        </select>
+                    </p>
+                    <p>
+                        <button class="btn btn-secondary" id="createP">
+                            Créer le personnage
+                        </button>
+                    </p>
+                    <div id="fichePerso">
+
+                    </div>
+                </main>
+            </article>
+            <article class="col-lg-6">
+                <header>
+                    <h2>POO : Ennemi</h2>
+                </header>
+                <main id="ennemi">
+                    <p>
+                        <label class="form-label">
+                            Prénom
+                        </label>
+                        <input type="text" id="prenomE" class="form-control" />
+                    </p>
+                    <p>
+                        <label class="form-label">
+                            Nom
+                        </label>
+                        <input type="text" id="nomE" class="form-control" />
+                    </p>
+                    <p>
+                        <button class="btn btn-secondary" id="createE">
+                            Générer l'ennemi aléatoirement
+                        </button>
+                    </p>
+                    <p id="ficheE">
+
+                    </p>
+                </main>
+            </article>
+        </section>
+    </main>
+    <footer class="bg-light">
+        &copy; Dawan 2021-11
+    </footer>
+</body>
+
+</html>

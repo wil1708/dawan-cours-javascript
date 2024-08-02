@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation Javascript</title>
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/bootstrap.bundle.js"></script>
+    <script src="../js/scripts.js"></script>
+    <script>
+
+        const posts = '../resource/posts.json';
+        const comments = '../resource/comments.json';
+
+        function affichePosts(posts, idPost = null) {
+            let html = '';
+            let lineOK = false;
+            let returnButton = '';
+            let commentButton = '';
+            let linePost = '';
+            for(let post of posts) {
+                if (null === idPost) {
+                    lineOK = true;
+                } else {
+                    if (null !== idPost && post.id == idPost) {
+                        lineOK = true;
+                        // bouton d'action pour revenir vers la liste des posts
+                        // bouton d'action pour afficher les commentaires du post
+                        returnButton = `
+                        <button class="btn btn-secondary" data-action="retour">
+                            liste des posts
+                        </button>`;
+                        commentButton = `
+                        <button class="btn btn-secondary" data-action="comments" data-postId="${idPost}">
+                            Voir les commentaires
+                        </button>`;
+                    }
+                }
+                if (lineOK) {
+                    linePost = `
+                    <tr 
+                        data-userid="${post.userId}" 
+                        data-postid="${post.id}">
+                        <td>
+                            title : ${post.title}
+                        </td>
+                        <td>
+                            ${post.body}<br />
+                            ${returnButton} ${commentButton}
+                        </td>
+                    </tr>
+                    `;
+                    lineOK = false;
+                    returnButton = '';
+                    commentButton = '';
+                    html += linePost;
+                    linePost = '';
+                }
+            }
+            return html;
+        }
+
+        function afficheComments(comments, idPost) {
+            let html = '';
+            let lineOK = false;
+            let lineComment = '';
+            for (let comment of comments) {
+                if (comment.postId == idPost) {
+                    lineComment = `
+                    <tr>
+                        <td>
+                            Name : ${comment.name}<br />
+                            email :  ${comment.email}
+                        </td>
+                        <td>
+                            ${comment.body}
+                        </td>
+                    </tr>
+                    `;
+                    lineOK = false;
+                    html += lineComment;
+                    lineComment = '';
+                }
+            }
+            return html;
+        }
+
+        function fetchContent(url, typeContent, idPost = null) {
+            let content = '';
+            fetch(url)
+            .then(response => response.json())
+            .then(jsonContent => {
+                switch (typeContent) {
+                    case ('post'):
+                        content = affichePosts(jsonContent, idPost);
+                        s('#result').innerHTML = content;
+                        break;
+                    case ('comments'):
+                        content = afficheComments(jsonContent, idPost);
+                        s('#comments').innerHTML = content;
+                        break;
+                }
+            });
+        }
+
+        /*
+        function fetchData(url, typeContent){
+            fetch(url)
+            .then(response => response.json())
+            .then(jsonContent => {
+                //console.log('Fetch', jsonContent);
+                return jsonContent;
+            });
+        }
+
+        let contentPostJson = null;
+        let contentCommentsJson = null;
+
+        async function getContent(url, typeContent){
+            content = await fetchData(url, typeContent);
+            return content;
+        }
+
+        contentPostJson = getContent(posts, 'post');
+        contentCommentsJson = getContent(comments, 'comments');
+        */
+
+        loaded(function () {
+            loadNav();
+
+            fetchContent(posts, 'post');
+            s('table#result').addEventListener('click', function (event) {
+                let postId = event.target.parentNode.dataset.postid;
+                let action = event.target.dataset.action;
+                let commentPostId = event.target.dataset.postid;
+                if (null === postId || action) {
+                    switch (action) {
+                        case 'retour':
+                            fetchContent(posts, 'post');
+                            s('#comments').innerHTML = '';
+                            postId = null;
+                            break;
+                        case 'comments':
+                            fetchContent(comments, 'comments', commentPostId);
+                            postId = null;
+                            break;
+                    }
+                } else {
+                    fetchContent(posts, 'post', postId);
+                    postId = null;
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <header class="bg-light">
+        <h1>Formation Javascript</h1>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    </nav>
+    <main class="container">
+        <section class="row">
+            <article class="col-lg-12">
+                <header>
+                    <h2>TP / TD</h2>
+                </header>
+                <main>
+                    <h3>Affichage des posts et commentaires</h3>
+                    <div class="blog-wrapper">
+                        <table id="result" class="table">
+
+                        </table>
+                    </div>
+                    <hr />
+                    <table id="comments" class="table">
+
+                    </table>
+                </main>
+            </article>
+        </section>
+    </main>
+    <footer class="bg-light">
+        &copy; Dawan 2021-11
+    </footer>
+</body>
+
+</html>

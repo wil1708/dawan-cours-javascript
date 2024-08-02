@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h2>Bienvenue sur notre application ExpressJS</h2>
+    <p>Hello <em>{{ name }}</em></p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Donec sed odio operae, eu vulputate felis rhoncus. Contra legem facit qui id facit quod lex prohibet.</p>
+    <p>Quis aute iure reprehenderit in voluptate velit esse. Me non paenitet nullum festiviorem excogitasse ad hoc. Gallia est omnis divisa in partes tres, quarum.</p>
+    <p>Nec dubitamus multa iter quae et nos invenerat. Tityre, tu patulae recubans sub tegmine fagi dolor. Cum sociis natoque penatibus et magnis dis parturient.</p>
+
+    <p>{{ content }}: <strong>Non sécurisé</strong></p>
+
+    <p>
+        {{ content | safe }}: 
+        <strong>utiliser filtre <a href="https://mozilla.github.io/nunjucks/templating.html#safe" target="_blank">safe</a> pour interpréter les balises html d'une variable</strong>
+    </p>
+
+    <!-- <p [innerHTML]="varNg"></p> -->
+
+    <img src="/images/event-loop.png" alt="Single Event Loop" />
+{% endblock %}

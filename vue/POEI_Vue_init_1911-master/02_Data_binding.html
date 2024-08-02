@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Binding</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <h1>Le data binding</h1>
+
+    <div>
+        <img v-bind:src="img_url" v-bind:width="width">
+        <img :src="image.url" :width="image.width" :alt="image.alt">
+        <!-- v-bind:property   -> :property -->
+    </div>
+
+    <p class="alert w-75"
+       @click="message.is_error = !message.is_error"
+       :class="(message.is_error)? 'alert-danger' : 'alert-primary'"
+    >{{message.text}}</p>
+    <p @click="message2.is_error = !message2.is_error"  class="alert w-75"
+       :class="(message2.is_error)? 'alert-danger' : 'alert-primary'"
+    >{{message2.text}}</p>
+</div>
+
+<script>
+    const vm = new Vue({
+        el: '#app',
+        data: {
+            img_url : 'https://images.rtl.fr/~c/770v513/rtl/www/1144688-baby-yoda-dans-la-saison-2-de-the-mandalorian.jpg',
+            width: 400,
+            image: {
+                url: 'https://img-19.ccm2.net/WNCe54PoGxObY8PCXUxMGQ0Gwss=/480x270/smart/d8c10e7fd21a485c909a5b4c5d99e611/ccmcms-commentcamarche/20456790.jpg',
+                width: 400,
+                alt : 'Un chat avec des lunettes'
+            },
+            message : {text: 'Hello World', is_error: false},
+            message2 : {text: 'Alert, something is wrong', is_error: true},
+        }
+    })
+
+</script>
+
+</body>
+</html>

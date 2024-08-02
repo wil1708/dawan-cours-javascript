@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation Javascript</title>
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/bootstrap.bundle.js"></script>
+    <script src="../js/scripts.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function(){
+            loadNav();
+            console.log('page chargée');
+            //sessionStorage
+            let btnSession = document.querySelector('#btnSession');
+            let inputSessionUser = document.querySelector('#sessionUser');
+            let dataSession = document.querySelector('#dataSession');
+            let clearSessionItem = document.querySelector('#btnClearSessionItem');
+            let clearSession = document.querySelector('#btnClearSession');
+
+            console.log(btnSession);
+            console.log(sessionStorage);
+
+            if(sessionStorage.getItem('sessionUserName')){
+                dataSession.innerHTML = `<b>${sessionStorage.getItem('sessionUserName')}</b>`;
+            }else{
+                dataSession.innerHTML = `<b>Pas de sessionUser enregistré</b>`;
+            }
+
+            btnSession.addEventListener('click', function(){
+                if(inputSessionUser.value !== ''){
+                    sessionStorage.setItem('sessionUserName', inputSessionUser.value);
+                    dataSession.innerHTML = `<b>${sessionStorage.getItem('sessionUserName')}</b>`;
+                    inputSessionUser.value = '';
+                }
+            });
+
+            //btnClearItem  btnClearSession
+            clearSessionItem.addEventListener('click', function(){
+                sessionStorage.removeItem('sessionUserName');
+                dataSession.innerHTML = `<b>Pas de sessionUser enregistré</b>`;
+            });
+
+            clearSession.addEventListener('click', function(){
+                sessionStorage.clear();
+                dataSession.innerHTML = `<b>Pas de sessionUser enregistré</b>`;
+            });
+
+            //localStorage
+            let btnLocal = document.querySelector('#btnLocal');
+            let inputLocalUser = document.querySelector('#localUser');
+            let dataLocal = document.querySelector('#dataLocal');
+            let clearLocalItem = document.querySelector('#btnClearLocalItem');
+            let clearLocal = document.querySelector('#btnClearLocal');
+
+            console.log(btnLocal);
+            console.log(localStorage);
+
+            if(localStorage.getItem('localUserName')){
+                dataLocal.innerHTML = `<b>${localStorage.getItem('localUserName')}</b>`;
+            }else{
+                dataLocal.innerHTML = `<b>Pas de localUserName enregistré</b>`;
+            }
+
+            btnLocal.addEventListener('click', function(){
+                if(inputLocalUser.value !== ''){
+                    localStorage.setItem('localUserName', inputLocalUser.value);
+                    dataLocal.innerHTML = `<b>${localStorage.getItem('localUserName')}</b>`;
+                    inputLocalUser.value = '';
+                }
+            });
+
+            //btnClearItem  btnClearSession
+            clearLocalItem.addEventListener('click', function(){
+                localStorage.removeItem('localUserName');
+                dataLocal.innerHTML = `<b>Pas de localUserName enregistré</b>`;
+            });
+
+            clearLocal.addEventListener('click', function(){
+                localStorage.clear();
+                dataLocal.innerHTML = `<b>Pas de localUserName enregistré</b>`;
+            });
+            /*
+            let cookieValue = 'Nico';
+            // création d'une date expiration
+            let dateNow = new Date();
+            console.log(dateNow);
+            // 1 * 24 * 60 * 60 * 1000
+            dateNow.setTime( dateNow.getTime() + (1 * 24 * 60 * 60 * 1000) );
+            console.log(dateNow);
+            // détruire prématurément un cookie, il faut lui donner une date d'expiration dépassée
+            let anteDateNow = new Date();
+            anteDateNow.setTime( anteDateNow.getTime() + (-1 * 24 * 60 * 60 * 1000) );
+            console.log(anteDateNow);
+
+            // créer un cookie qui expire à dateNow
+            document.cookie = `monCookie=${cookieValue}; expires=${anteDateNow.toUTCString()}; SameSite=Strict; Secure`;
+
+            
+            */
+
+            // #cookieValue #btnCookie #dataCookieValue #btnEmptyCookieValue #btnClearCookieValue
+            let btnCookie = document.querySelector('#btnCookie');
+            let cookieValue = document.querySelector('#cookieValue');
+            let dataCookieValue = document.querySelector('#dataCookieValue');
+            let btnEmptyCookieValue = document.querySelector('#btnEmptyCookieValue');
+            let btnClearCookieValue = document.querySelector('#btnClearCookieValue');
+
+            if(getCookie('monCookie')){
+                dataCookieValue.innerText = getCookie('monCookie');
+            }else{
+                dataCookieValue.innerHTML = `<b>Pas de cookie "monCookie" d'enregistré</b>`;
+            }
+
+            btnCookie.addEventListener('click', function(){
+                if(cookieValue.value !== ''){
+                    setCookie('monCookie', cookieValue.value, 1);
+                    cookieValue.value = '';
+                    dataCookieValue.innerText = getCookie('monCookie');
+                    console.log(document.cookie);
+                }
+            });
+
+            btnEmptyCookieValue.addEventListener('click', function(){
+                    setCookie('monCookie', '', 1);
+                    dataCookieValue.innerText = getCookie('monCookie');
+                    console.log(document.cookie);
+            });
+
+            btnClearCookieValue.addEventListener('click', function(){
+                    setCookie('monCookie');
+                    dataCookieValue.innerText = '';
+                    console.log(document.cookie);
+            });
+
+            console.log(document.cookie);
+            console.log(document);
+
+        });
+        console.log('chargement de la page');
+    </script>
+</head>
+<body>
+    <header class="bg-light">
+        <h1>Formation Javascript</h1>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        
+    </nav>
+    <main class="container">
+        <section class="row">
+            <article class="col-lg-6">
+                <header>
+                    <h2>Le stockage des données en JS</h2>
+                </header>
+                <main>
+                    <h3>sessionStorage</h3>
+                    <p>
+                        <label class="form-label">UserName :</label>
+                        <input type="text" class="form-control" id="sessionUser" value="" />
+                    </p>
+                    <p>
+                        <button id="btnSession" class="btn btn-outline-primary">
+                            Sauvegarder session user name
+                        </button>
+                    </p>
+                    <p>
+                        <button id="btnClearSessionItem" class="btn btn-outline-warning">
+                            Supprimer session user name
+                        </button>
+                    </p>
+                    <p>
+                        <button id="btnClearSession" class="btn btn-outline-danger">
+                            Vider la session
+                        </button>
+                    </p>
+                    <p>
+                        Session username actuel : <span id="dataSession"></span>
+                    </p>
+                </main>
+            </article>
+            <article class="col-lg-6">
+                <header>
+                    <h2>Le stockage des données en JS</h2>
+                </header>
+                <main>
+                    <h3>localStorage</h3>
+                    <p>
+                        <label class="form-label">UserName :</label>
+                        <input type="text" class="form-control" id="localUser" value="" />
+                    </p>
+                    <p>
+                        <button id="btnLocal" class="btn btn-outline-primary">
+                            Sauvegarder local user name
+                        </button>
+                    </p>
+                    <p>
+                        <button id="btnClearLocalItem" class="btn btn-outline-warning">
+                            Supprimer local user name
+                        </button>
+                    </p>
+                    <p>
+                        <button id="btnClearLocal" class="btn btn-outline-danger">
+                            Vider le local storage
+                        </button>
+                    </p>
+                    <p>
+                        Local username actuel : <span id="dataLocal"></span>
+                    </p>
+                </main>
+            </article>
+        </section>
+        <section class="row">
+            <article class="offset-lg-3 col-lg-6">
+                <header>
+                    <h2>Le stockage des données en JS</h2>
+                </header>
+                <main>
+                    <h3>Les cookies</h3>
+                    <p>
+                        <label class="form-label">Cookie Value :</label>
+                        <input type="text" class="form-control" id="cookieValue" value="" />
+                    </p>
+                    <p>
+                        <button id="btnCookie" class="btn btn-outline-primary">
+                            Sauvegarder cookie value
+                        </button>
+                    </p>
+                    <p>
+                        <button id="btnEmptyCookieValue" class="btn btn-outline-warning">
+                            Vider cookie value
+                        </button>
+                    </p>
+                    <p>
+                        <button id="btnClearCookieValue" class="btn btn-outline-danger">
+                            Supprimer cookie value
+                        </button>
+                    </p>
+                    <p>
+                        Cookie value actuel : <span id="dataCookieValue"></span>
+                    </p>
+                </main>
+            </article>
+        </section>
+    </main>
+    <footer class="bg-light">
+        &copy; Dawan 2021-11
+    </footer>
+</body>
+
+</html>

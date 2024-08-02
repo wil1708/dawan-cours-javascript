@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formation Javascript</title>
+    <link rel="stylesheet" href="../css/bootstrap.css" />
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/bootstrap.bundle.js"></script>
+    <script src="../js/scripts.js"></script>
+    <script>
+        function suggestionUser(users, input){
+            let html = '';
+            let lineOK = false;
+            let lineResult = '';
+            let compare = '';
+            let style = '';
+            for(user of users){
+                lineResult += '<tr>';
+                for(let key in user){
+                    if(user.hasOwnProperty(key)){
+                        if('object' !== typeof user[key]){
+                            compare = user[key].toString().toLowerCase();
+                            //console.log(user[key]);
+                            let position = compare.indexOf(input.toLowerCase());
+                            if( position >= 0){
+                                lineOK = true
+                                style = ' style="color:#0d6efd; font-weight:bold"';
+                            }
+                            
+                            position = -1;
+                            lineResult += `<td${style}>${user[key]}</td$>`;
+                        style = '';
+                        }
+                    }
+                }
+                lineResult += '<tr>';
+                html += (lineOK)?lineResult:'';
+                lineResult = '';
+                lineOK = false;
+            }
+            return html;
+        }
+        loaded(function(){
+            loadNav();
+            
+            sAll('button.read').forEach( btn => {
+                btn.addEventListener('click', function(){
+                    //fetch
+                    fetch(this.dataset.url)
+                    .then(response => response.json())
+                    .then( data => {
+                        let tabResult = jsonUsersToTableObject(data);
+                        // la fonction jsonUsersToTableObject retourne un tableau
+                        // le premier élément représente le 1er niveau du json, les colonnes du tableau
+                        // le second élément possède toutes les lignes du tableau, si
+                        // un contenu de premier niveau possède un second niveau de données, la fonction le parcours
+                        // mais ne renvoie pas les éléments avec un troisième niveau de données
+                        s('#result > thead').innerHTML = `${ tabResult[0] }`;
+                        s('#result > tbody').innerHTML = `${ tabResult[1] }`;
+                    })
+                });
+            } );
+            let tbody = s('#result > tbody');
+            tbody.addEventListener('click', function(event){
+                console.log(event.target.parentNode.dataset.email);
+            });
+
+            let inputSearchUser = s('#searchUser');
+            let resultTable = s('table#resultSearch');
+
+            inputSearchUser.addEventListener('keyup', function(){
+                //console.log(inputSearchUser.value.length);
+                let inputValue = inputSearchUser.value;
+                if(inputValue.length >= 3){
+                    //console.log('recherche user');
+                    fetch('https://jsonplaceholder.typicode.com/users')
+                    .then(response => response.json())
+                    .then(liste => {
+                        resultTable.innerHTML = suggestionUser(liste, inputValue);
+                    })
+                    .catch(console.log());
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <header class="bg-light">
+        <h1>Formation Javascript</h1>
+    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        
+    </nav>
+    <main class="container">
+        <section class="row">
+            <article class="col-lg-6">
+                <header>
+                    <h2>AJAX bdd.json</h2>
+                </header>
+                <main>
+                    <p>
+                        <button class="btn btn-secondary read" data-url="https://jsonplaceholder.typicode.com/users">
+                            Lire la réponse des users sur jsonplaceholder
+                        </button>
+                        <button class="btn btn-secondary read" data-url="../resource/bdd.json">
+                            Lire la réponse bdd.json en local
+                        </button>
+                    </p>
+                </main>
+            </article>
+            <article class="col-lg-6">
+                <header>
+                    <h2>Suggestion utilisateurs</h2>
+                </header>
+                <main>
+                    <p>
+                        <input type="text" id="searchUser" value="" class="form-control" />
+                    </p>
+                    
+                </main>
+            </article>
+        </section>
+        <section class="row">
+            <article class="col-lg-12">
+                <table id="result" class="table">
+                    <thead>
+                        
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+                <table id="resultSearch" class="table">
+                        
+                </table>
+            </article>
+        </section>
+    </main>
+    <footer class="bg-light">
+        &copy; Dawan 2021-11
+    </footer>
+</body>
+
+</html>

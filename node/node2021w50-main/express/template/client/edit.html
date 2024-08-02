@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h2>Edition client</h2>
+
+    <form method="post" action="">
+        <div class="mb-3">
+            <label>Nom: </label>
+            <input type="text" name="nom" value="{{ client.nom }}" />
+        </div>
+        <div class="mb-3">
+            <label>Prénom: </label>
+            <input type="text" name="prenom" value="{{ client.prenom }}" />
+        </div>
+        <div class="mb-3">
+            <label>Date Naissance: </label>
+            <input type="date" name="naissance" value="{{ client.naissance.toISOString().split('T')[0] }}" />
+        </div>
+        <div class="mb-3">
+            <label>Email: </label>
+            <input type="text" name="email" value="{{ client.email }}" />
+        </div>
+        <div class="mb-3">
+            <label>Téléphone: </label>
+            <input type="text" name="telephone" value="{{ client.telephone }}" />
+        </div>
+        <input type="submit" value="Enregistrer" />
+    </form>
+
+{% endblock%}
